@@ -19,7 +19,6 @@ Airplane.prototype.land = function () {
   this.isFlying = false;
 };
 
-
 /*
 // 👇 COMPLETE YOUR WORK BELOW 👇
 // 👇 COMPLETE YOUR WORK BELOW 👇
@@ -38,11 +37,26 @@ Airplane.prototype.land = function () {
     - Give instances of Person a method `.toString()`:
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
-
-function Person() {
-
+//Constructor
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
-
+// instance of person ability eat
+Person.prototype.eat = function (edible) {
+  if (this.stomach.length < 10) {
+    this.stomach.push(edible);
+  }
+};
+// instance of person ability poop
+Person.prototype.poop = function () {
+  this.stomach = [];
+};
+// instance of person returns name and age as string
+Person.prototype.toString = function () {
+  return `${this.name}, ${this.age}`;
+};
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -56,11 +70,16 @@ function Person() {
     - STRETCH: A car which runs out of `fuel` while driving can't drive any more distance:
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
-
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  // All instances of car share
+  this.tank = 0;
+  this.odometer = 0;
 }
-
+Car.prototype.fill = function (gallon) {
+  this.tank += gallon;
+};
 /*
   TASK 3
     - Write a Baby constructor subclassing Person.
@@ -68,28 +87,56 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  this.name = name;
+  this.age = age;
+  this.favoriteToy = favoriteToy;
 }
+// baby inherits person instances
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function () {
+  return `Playing with ${this.favoriteToy}`;
+};
+//Only accepts two arguments because of Person constructor
+const person1 = new Person("William", "21");
+console.log(person1); // stomach will be empty because we have to pass it in with instance of eat
+person1.eat("sushi");
+// now three arguments will show
+console.log(person1);
+// baby takes in three arguments because of its Baby constructor
+// it also inherits everything from person eat() poop() toString( ) ** the instances of person in other words.
+const baby2 = new Baby("Matt", "27", "PRINCESS Doll");
+//Baby will only show princess not 'Matthew or '27' because baby only instance is baby .play
+console.log(baby2);
+baby2.play();
+// Invokes play instance
+console.log(baby2.play());
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. this. refers to window object if in browser environment
+  2. function is executed as a property of an object, then "this" refers to the parent object.
+  3. when  a function is called with the 'new keyword' then this refers to the instance created
+  4. with call or apply or bind this. refers to value passed in
 */
 
-
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
-if (typeof exports !== 'undefined') {
-  module.exports = module.exports || {}
-  if (Airplane) { module.exports.Airplane = Airplane }
-  if (Person) { module.exports.Person = Person }
-  if (Car) { module.exports.Car = Car }
-  if (Baby) { module.exports.Baby = Baby }
+if (typeof exports !== "undefined") {
+  module.exports = module.exports || {};
+  if (Airplane) {
+    module.exports.Airplane = Airplane;
+  }
+  if (Person) {
+    module.exports.Person = Person;
+  }
+  if (Car) {
+    module.exports.Car = Car;
+  }
+  if (Baby) {
+    module.exports.Baby = Baby;
+  }
 }
